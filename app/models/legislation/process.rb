@@ -21,7 +21,7 @@ class Legislation::Process < ApplicationRecord
   translates :homepage,           touch: true
   include Globalizable
 
-  PHASES_AND_PUBLICATIONS = %i[homepage_phase draft_phase debate_phase allegations_phase
+  PHASES_AND_PUBLICATIONS = %i[homepage_phase draft_phase debate_phase allegations_phase review_phase
                                proposals_phase draft_publication result_publication].freeze
 
   CSS_HEX_COLOR = /\A#?(?:[A-F0-9]{3}){1,2}\z/i.freeze
@@ -47,7 +47,7 @@ class Legislation::Process < ApplicationRecord
   validates :start_date, presence: true
   validates :end_date, presence: true
 
-  %i[draft debate proposals_phase allegations].each do |phase_name|
+  %i[draft debate proposals_phase allegations review].each do |phase_name|
     enabled_attribute = :"#{phase_name.to_s.gsub("_phase", "")}_phase_enabled?"
 
     validates :"#{phase_name}_start_date", presence: true, if: enabled_attribute
@@ -86,6 +86,11 @@ class Legislation::Process < ApplicationRecord
   def allegations_phase
     Legislation::Process::Phase.new(allegations_start_date,
                                     allegations_end_date, allegations_phase_enabled)
+  end
+
+  def review_phase
+    Legislation::Process::Phase.new(review_start_date,
+                                    review_end_date, review_phase_enabled)
   end
 
   def proposals_phase
@@ -156,6 +161,10 @@ class Legislation::Process < ApplicationRecord
       if allegations_end_date && allegations_start_date &&
          allegations_end_date < allegations_start_date
         errors.add(:allegations_end_date, :invalid_date_range)
+      end
+      if review_end_date && review_start_date &&
+         review_end_date < review_start_date
+        errors.add(:review_end_date, :invalid_date_range)
       end
     end
 end
