@@ -82,6 +82,25 @@ describe Legislation::Process do
       expect(process.errors.messages[:allegations_end_date]).to include("can't be blank")
     end
 
+    it "is invalid if review phase is enabled but review_start_date is not present" do
+      process = build(
+        :legislation_process, review_phase_enabled: true,
+        review_start_date: nil,
+      )
+
+      expect(process).to be_invalid
+      expect(process.errors.messages[:review_start_date]).to include("can't be blank")
+    end
+
+    it "is invalid if review phase is enabled but review_end_date is not present" do
+      process = build(
+        :legislation_process, review_phase_enabled: true, review_end_date: ""
+      )
+
+      expect(process).to be_invalid
+      expect(process.errors.messages[:review_end_date]).to include("can't be blank")
+    end
+
     it "is valid if start dates are missing and the phase is disabled" do
       draft_disabled = build(:legislation_process,
                              draft_phase_enabled: false,
@@ -98,11 +117,15 @@ describe Legislation::Process do
       allegations_disabled = build(:legislation_process,
                                    allegations_phase_enabled: false,
                                    allegations_start_date: nil)
+      review_disabled = build(:legislation_process,
+                             review_phase_enabled: false,
+                             review_start_date: nil)
 
       expect(draft_disabled).to be_valid
       expect(debate_disabled).to be_valid
       expect(proposals_disabled).to be_valid
       expect(allegations_disabled).to be_valid
+      expect(review_disabled).to be_valid
     end
 
     it "is valid if end dates are missing and the phase is disabled" do
@@ -122,10 +145,15 @@ describe Legislation::Process do
                                    allegations_phase_enabled: false,
                                    allegations_end_date: nil)
 
+      review_disabled = build(:legislation_process,
+                                   review_phase_enabled: false,
+                                   review_end_date: nil)
+
       expect(draft_disabled).to be_valid
       expect(debate_disabled).to be_valid
       expect(proposals_disabled).to be_valid
       expect(allegations_disabled).to be_valid
+      expect(review_disabled).to be_valid
     end
 
     it "is valid if start and end dates are missing and the phase is disabled" do
@@ -148,11 +176,16 @@ describe Legislation::Process do
                                    allegations_phase_enabled: false,
                                    allegations_start_date: nil,
                                    allegations_end_date: nil)
+      review_disabled = build(:legislation_process,
+                                   review_phase_enabled: false,
+                                   review_start_date: nil,
+                                   review_end_date: nil)
 
       expect(draft_disabled).to be_valid
       expect(debate_disabled).to be_valid
       expect(proposals_disabled).to be_valid
       expect(allegations_disabled).to be_valid
+      expect(review_disabled).to be_valid
     end
   end
 
