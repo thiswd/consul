@@ -238,6 +238,9 @@ namespace :admin do
       resources :milestones
       resources :progress_bars, except: :show
       resource :homepage, only: [:edit, :update]
+      resources :reviews, except: [:show] do
+        get :document, on: :collection
+      end
     end
   end
 
