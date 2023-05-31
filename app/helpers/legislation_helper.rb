@@ -14,6 +14,7 @@ module LegislationHelper
       "questions"      => admin_legislation_process_questions_path(process),
       "proposals"      => admin_legislation_process_proposals_path(process),
       "draft_versions" => admin_legislation_process_draft_versions_path(process),
+      "reviews"        => admin_legislation_process_reviews_path(process),
       "milestones"     => admin_legislation_process_milestones_path(process)
     }
   end
