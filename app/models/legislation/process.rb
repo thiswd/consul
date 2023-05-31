@@ -42,6 +42,10 @@ class Legislation::Process < ApplicationRecord
     foreign_key: "legislation_process_id",
     inverse_of:  :process,
     dependent:   :destroy
+  has_many :reviews, -> { order(:id) },
+    foreign_key: "legislation_process_id",
+    inverse_of:  :process,
+    dependent:   :destroy
 
   validates_translation :title, presence: true
   validates :start_date, presence: true
