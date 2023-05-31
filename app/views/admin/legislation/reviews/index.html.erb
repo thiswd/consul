@@ -1,0 +1,53 @@
+<% provide :title do %>
+  <%= t("admin.header.title") %> - <%= t("admin.menu.legislation") %> - <%= @process.title %> - <%= t("admin.legislation.reviews.index.title") %>
+<% end %>
+
+<div class="legislation-draft-versions-index">
+  <%= back_link_to admin_legislation_processes_path, t("shared.back") %>
+
+  <h2><%= @process.title %></h2>
+
+  <%= render "admin/legislation/processes/subnav",
+    process: @process, active: "reviews"
+  %>
+
+  <div class="small-12 column">
+    <h4 class="inline-block">
+      <%= t("admin.legislation.reviews.index.title") %>
+    </h4>
+
+    <div class="float-right">
+      <%= link_to(
+        t("admin.legislation.reviews.index.new_document"), new_admin_legislation_process_review_path(@process),
+        class: "button"
+      ) %>
+    </div>
+
+    <% if @reviews.any? %>
+      <% @reviews.each do |review| %>
+        <table class="stack">
+          <legend><%= review.title %></legend>
+          <thead>
+            <tr>
+              <th><%= t("admin.legislation.reviews.table.review_level_label") %></th>
+              <th><%= t("admin.legislation.reviews.table.title") %></th>
+              <th><%= t("admin.legislation.reviews.table.assessments") %></th>
+              <th class="text-center"><%= t("admin.legislation.reviews.table.review_votes_count") %></th>
+              <th class="text-center"><%= t("admin.legislation.reviews.table.comments_count") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% counter_level = 1 %>
+            <% review.sections.each.with_index(1) do |section, index| %>
+              <%= render 'section_result_row',
+                section: section,
+                indexes: [index],
+                counter_level: counter_level
+              %>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    <% end %>
+  </div>
+</div>
