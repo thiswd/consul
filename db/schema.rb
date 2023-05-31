@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_22_184323) do
+ActiveRecord::Schema.define(version: 2023_05_30_210000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -880,6 +880,17 @@ ActiveRecord::Schema.define(version: 2023_04_22_184323) do
     t.integer "author_id"
     t.index ["hidden_at"], name: "index_legislation_questions_on_hidden_at"
     t.index ["legislation_process_id"], name: "index_legislation_questions_on_legislation_process_id"
+  end
+
+  create_table "legislation_reviews", force: :cascade do |t|
+    t.string "title"
+    t.bigint "user_id"
+    t.bigint "legislation_process_id"
+    t.datetime "hidden_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["legislation_process_id"], name: "index_legislation_reviews_on_legislation_process_id"
+    t.index ["user_id"], name: "index_legislation_reviews_on_user_id"
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
@@ -1796,6 +1807,8 @@ ActiveRecord::Schema.define(version: 2023_04_22_184323) do
   add_foreign_key "images", "users"
   add_foreign_key "legislation_draft_versions", "legislation_processes"
   add_foreign_key "legislation_proposals", "legislation_processes"
+  add_foreign_key "legislation_reviews", "legislation_processes"
+  add_foreign_key "legislation_reviews", "users"
   add_foreign_key "locks", "users"
   add_foreign_key "machine_learning_jobs", "users"
   add_foreign_key "managers", "users"
