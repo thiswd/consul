@@ -12,7 +12,7 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
 
   def create
     @review = @process.reviews.new(review_params)
-    @review.user_id = current_user
+    @review.user_id = current_user.id
 
     if @review.save
       redirect_to admin_legislation_process_review_path(@process, @review),
