@@ -31,8 +31,11 @@
               <th colspan="4"><%= review.title %></th>
               <th>
                 <%= render Admin::TableActionsComponent.new(
-                  review, edit_path: edit_admin_legislation_process_review_path(@process, review),
-                  destroy_path: admin_legislation_process_review_path(@process, review)
+                  review,
+                  actions: [:configure, :edit, :destroy],
+                  edit_path: edit_admin_legislation_process_review_path(@process, review),
+                  destroy_path: admin_legislation_process_review_path(@process, review),
+                  configure_path: admin_legislation_process_review_path(@process, review)
                 ) %>
               </th>
             </tr>

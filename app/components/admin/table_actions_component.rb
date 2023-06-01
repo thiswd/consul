@@ -16,6 +16,18 @@ class Admin::TableActionsComponent < ApplicationComponent
       options[:actions] || [:edit, :destroy]
     end
 
+    def configure_text
+      options[:configure_text]
+    end
+
+    def configure_path
+      options[:configure_path]
+    end
+
+    def configure_options
+      options[:configure_options] || {}
+    end
+
     def edit_text
       options[:edit_text]
     end

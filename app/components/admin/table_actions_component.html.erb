@@ -1,6 +1,10 @@
 <div class="table-actions">
   <%= content %>
 
+  <% if actions.include?(:configure) %>
+    <%= action(:configure, **configure_options.merge(text: configure_text, path: configure_path)) %>
+  <% end %>
+
   <% if actions.include?(:edit) %>
     <%= action(:edit, **edit_options.merge(text: edit_text, path: edit_path)) %>
   <% end %>
