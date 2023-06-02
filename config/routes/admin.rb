@@ -238,7 +238,10 @@ namespace :admin do
       resources :milestones
       resources :progress_bars, except: :show
       resource :homepage, only: [:edit, :update]
-      resources :reviews
+      resources :reviews, only: [:index, :new, :create]
+    end
+    resources :reviews, except: [:index, :new, :create] do
+      resources :section_types, except: [:index, :show], controller: "reviews/section_types"
     end
   end
 
