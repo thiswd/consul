@@ -1,6 +1,8 @@
 class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
   load_and_authorize_resource :process, class: "Legislation::Process"
-  load_and_authorize_resource :review, class: "Legislation::Review", through: :process
+  load_and_authorize_resource :review, class: "Legislation::Review"
+
+  before_action :load_process, only: [:show, :edit]
 
   def index
     @reviews = @process.reviews
@@ -15,7 +17,7 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
     @review.user_id = current_user.id
 
     if @review.save
-      redirect_to admin_legislation_process_review_path(@process, @review),
+      redirect_to admin_legislation_review_path(@review),
         notice: t("admin.legislation.reviews.create.notice")
     else
       render :new
@@ -24,7 +26,7 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
 
   def update
     if @review.update(review_params)
-      redirect_to admin_legislation_process_review_path(@process, @review),
+      redirect_to admin_legislation_review_path(@review),
         notice: t("admin.legislation.reviews.update.notice")
     else
       render :edit
@@ -39,15 +41,11 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
 
   private
 
-  def review_params
-    params.require(:legislation_review).permit([:title])
-  end
+    def review_params
+      params.require(:legislation_review).permit([:title])
+    end
 
-  def resource
-    @review || ::Legislation::Review.find(params[:id])
-  end
-
-  def load_section_classifications
-    @section_classifications = @review.section_classifications
-  end
+    def load_process
+      @process ||= @review.process
+    end
 end
