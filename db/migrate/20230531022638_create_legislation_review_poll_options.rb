@@ -1,4 +1,4 @@
-class CreateLegislationReviewPollOption < ActiveRecord::Migration[6.0]
+class CreateLegislationReviewPollOptions < ActiveRecord::Migration[6.0]
   def change
     create_table :legislation_review_poll_options do |t|
       t.string :title
