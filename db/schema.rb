@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_30_210000) do
+ActiveRecord::Schema.define(version: 2023_05_31_022638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -880,6 +880,23 @@ ActiveRecord::Schema.define(version: 2023_05_30_210000) do
     t.integer "author_id"
     t.index ["hidden_at"], name: "index_legislation_questions_on_hidden_at"
     t.index ["legislation_process_id"], name: "index_legislation_questions_on_legislation_process_id"
+  end
+
+  create_table "legislation_review_poll_options", force: :cascade do |t|
+    t.string "title"
+    t.bigint "review_section_type_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["review_section_type_id"], name: "index_review_section_type_id"
+  end
+
+  create_table "legislation_review_section_types", force: :cascade do |t|
+    t.string "title"
+    t.integer "level"
+    t.bigint "legislation_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["legislation_review_id"], name: "index_legislation_review_section_types_on_legislation_review_id"
   end
 
   create_table "legislation_reviews", force: :cascade do |t|
@@ -1807,6 +1824,8 @@ ActiveRecord::Schema.define(version: 2023_05_30_210000) do
   add_foreign_key "images", "users"
   add_foreign_key "legislation_draft_versions", "legislation_processes"
   add_foreign_key "legislation_proposals", "legislation_processes"
+  add_foreign_key "legislation_review_poll_options", "legislation_review_section_types", column: "review_section_type_id"
+  add_foreign_key "legislation_review_section_types", "legislation_reviews"
   add_foreign_key "legislation_reviews", "legislation_processes"
   add_foreign_key "legislation_reviews", "users"
   add_foreign_key "locks", "users"
