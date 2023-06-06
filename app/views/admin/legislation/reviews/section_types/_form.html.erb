@@ -1,0 +1,60 @@
+<div class="row">
+  <%= form_for([:admin, @review, @section_type], url: url) do |f| %>
+
+    <%= render "shared/errors", resource: @section_type %>
+
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.text_field(:title, require: true) %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.check_box(
+          :show_poll_option_fields,
+          checked: @section_type.poll_options.any?,
+          data: { checkbox_toggle: "#poll_option-fields" },
+          disabled: @section_type.sections.any?
+        ) %>
+      </div>
+    </div>
+
+    <div id="poll_option-fields" class="row">
+      <% if @section_type.sections.empty? %>
+        <div class="small-12 medium-9 column">
+          <%= f.label(
+            :poll_options,
+            t("admin.legislation.reviews.section_types.form.poll_options")
+          ) %>
+        </div>
+      <% end %>
+      <div id="nested_poll_options">
+        <%= f.fields_for :poll_options do |ff| %>
+          <%= render "poll_option_fields", f: ff %>
+        <% end %>
+
+        <div class="js-add-fields-container">
+          <div class="small-12 medium-9 column">
+            <% if @section_type.sections.empty? %>
+              <%= link_to_add_association(
+                t("admin.legislation.reviews.section_types.form.add_option"),
+                f, :poll_options, class: "button hollow"
+              ) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="actions small-12 medium-4 column float-right">
+        <%= f.submit(
+          class: "button expanded large",
+          value: t("admin.legislation.reviews.section_types.form.save")
+        ) %>
+      </div>
+    </div>
+
+  <% end %>
+</div>
