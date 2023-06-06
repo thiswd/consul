@@ -242,6 +242,7 @@ namespace :admin do
     end
     resources :reviews, except: [:index, :new, :create] do
       resources :section_types, except: [:index, :show], controller: "reviews/section_types"
+      resources :sections, except: [:index, :show], controller: "reviews/sections"
     end
   end
 
