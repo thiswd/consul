@@ -122,7 +122,9 @@ module Abilities
       can [:manage], ::Legislation::Question
       can [:manage], ::Legislation::Proposal
       can [:manage], ::Legislation::Review
-      cannot :comment_as_moderator, [::Legislation::Question, Legislation::Annotation, ::Legislation::Proposal]
+      can [:manage],  ::Legislation::Review::Section
+      cannot :comment_as_moderator,
+[::Legislation::Question, Legislation::Annotation, ::Legislation::Proposal, ::Legislation::Review]
 
       can [:create], Document
       can [:destroy], Document do |document|
