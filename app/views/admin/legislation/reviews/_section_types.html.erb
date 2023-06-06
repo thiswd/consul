@@ -1,0 +1,61 @@
+<h2 class="inline-block">
+  <%= t("admin.legislation.reviews.section_types.section_type_title") %>
+</h2>
+
+<%= link_to(
+  t("admin.legislation.reviews.section_types.new_section_type"),
+  new_admin_legislation_review_section_type_path(@review),
+  class: "button float-right margin-right"
+) %>
+
+<% if @section_types.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <%= t("admin.legislation.reviews.table.section_type_label") %>
+        </th>
+        <th><%= t("admin.legislation.reviews.table.title") %></th>
+        <th class="text-center">
+          <%= t("admin.legislation.reviews.table.evaluable") %>
+        </th>
+        <th><%= t("admin.legislation.reviews.table.table_actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @section_types.each do |section_type| %>
+        <tr id="<%= dom_id(section_type) %>" class="legislation_section_type">
+          <td><strong><%= section_type.section_type_label %></strong></td>
+          <td><%= section_type.title %></td>
+          <td class="text-center">
+            <% if section_type.poll_options.any? %>
+              <span class="icon-check"></span>
+            <% else %>
+              <span class="icon-x rejected"></span>
+            <% end %>
+          </td>
+          <td>
+            <%= render Admin::TableActionsComponent.new(
+              section_type,
+              actions: [:edit],
+              edit_path: edit_admin_legislation_review_section_type_path(@review, section_type),
+            ) %>
+            <% if section_type == @section_types.last &&
+              section_type.sections.empty?
+            %>
+              <%= render Admin::TableActionsComponent.new(
+                section_type,
+                actions: [:destroy],
+                destroy_path: admin_legislation_review_section_type_path(@review, section_type)
+              ) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div data-alert class="callout warning margin-top clear">
+    <%= t("admin.legislation.reviews.section_types.empty_section_types") %>
+  </div>
+<% end %>

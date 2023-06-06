@@ -2,7 +2,7 @@
   <%= t("admin.header.title") %> - <%= t("admin.menu.legislation") %> - <%= @process.title %> - <%= t("admin.legislation.reviews.show.title") %>
 <% end %>
 
-<div class="legislation-draft-versions-index">
+<div class="legislation-review-sections-index">
 
   <%= back_link_to admin_legislation_process_reviews_path(@process), t("shared.back") %>
 
@@ -12,9 +12,9 @@
     process: @process, active: "reviews"
   %>
 
-  <%= render "section_classifications" %>
+  <%= render "section_types" %>
 
-  <% if @section_classifications&.any? %>
+  <% if @section_types.any? %>
     <div class="review-panels reviews-preview">
       <%= render "sections" %>
     </div>
