@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_31_022638) do
+ActiveRecord::Schema.define(version: 2023_06_07_023546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -897,6 +897,21 @@ ActiveRecord::Schema.define(version: 2023_05_31_022638) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["legislation_review_id"], name: "index_legislation_review_section_types_on_legislation_review_id"
+  end
+
+  create_table "legislation_review_sections", force: :cascade do |t|
+    t.bigint "legislation_review_id"
+    t.bigint "review_section_section_type_id"
+    t.string "title"
+    t.text "description"
+    t.integer "section_votes_count", default: 0
+    t.boolean "evaluable", default: false
+    t.string "ancestry"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ancestry"], name: "index_legislation_review_sections_on_ancestry"
+    t.index ["legislation_review_id"], name: "index_legislation_review_sections_on_legislation_review_id"
+    t.index ["review_section_section_type_id"], name: "index_review_section_section_type_id"
   end
 
   create_table "legislation_reviews", force: :cascade do |t|
@@ -1826,6 +1841,8 @@ ActiveRecord::Schema.define(version: 2023_05_31_022638) do
   add_foreign_key "legislation_proposals", "legislation_processes"
   add_foreign_key "legislation_review_poll_options", "legislation_review_section_types", column: "review_section_type_id"
   add_foreign_key "legislation_review_section_types", "legislation_reviews"
+  add_foreign_key "legislation_review_sections", "legislation_review_section_types", column: "review_section_section_type_id"
+  add_foreign_key "legislation_review_sections", "legislation_reviews"
   add_foreign_key "legislation_reviews", "legislation_processes"
   add_foreign_key "legislation_reviews", "users"
   add_foreign_key "locks", "users"
