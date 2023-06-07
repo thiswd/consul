@@ -1,0 +1,55 @@
+<div class="section-text">
+  <div class="section-block">
+    <h4><%= "#{section_type_label(indexes)} #{section.title}" %></h4>
+
+    <%= link_to(
+      t("admin.legislation.reviews.show.sections.edit"),
+      edit_admin_legislation_review_section_path(@review, section)
+    ) %>
+
+    <%= link_to(
+      t("admin.legislation.reviews.show.sections.delete"),
+      admin_legislation_review_section_path(@review, section),
+      method: :delete,
+      data: delete_section_confirmation(section)
+    ) %>
+
+    <% if section.description.present? %>
+      <div class="section-description">
+        <%= wysiwyg(section.description) %>
+      </div>
+    <% end %>
+
+    <p class="section-form-link">
+      <% unless counter_level == @section_types.size %>
+        <% section_type = @section_types[counter_level] %>
+        <%= link_to(
+          t(
+            "admin.legislation.reviews.show.sections.new",
+            title: section_type.downcase_title
+          ),
+          new_admin_legislation_review_section_path(
+            @review,
+            legislation_review_section: {
+              review_section_section_type_id: section_type.id,
+              parent_id: section.id
+            }
+          )
+        ) %>
+      <% else %>
+        <br>
+      <% end %>
+    </p>
+
+    <% if section.children.any? %>
+      <% counter_level += 1 %>
+      <% section.ordered_children.each.with_index(1) do |child, index| %>
+        <%= render 'section',
+          section: child,
+          indexes: section_indexes(indexes, index, counter_level),
+          counter_level: counter_level
+        %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
