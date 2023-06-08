@@ -1,0 +1,37 @@
+<div class="row">
+  <%= form_for([:admin, @review, @section], url: url) do |f| %>
+
+    <%= render "shared/errors", resource: @section %>
+
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.text_field(:title, require: true) %>
+      </div>
+      <div class="small-12 column">
+        <%= f.text_area(:description, class: "html-area") %>
+      </div>
+    </div>
+
+    <% if @section_type.poll_options.any? %>
+      <%= f.check_box(
+        :evaluable, checked: f.object.new_record? ? true : f.object.evaluable
+      ) %>
+    <% end %>
+
+    <%= f.hidden_field(:review_section_section_type_id, value: @section_type.id) %>
+
+    <% if parent_id = @parent&.id %>
+      <%= f.hidden_field(:parent_id, value: parent_id) %>
+    <% end %>
+
+    <div class="row">
+      <div class="actions small-12 medium-4 column">
+        <%= f.submit(
+          class: "button expanded large",
+          value: t("admin.legislation.reviews.sections.form.save")
+        ) %>
+      </div>
+    </div>
+
+  <% end %>
+</div>
