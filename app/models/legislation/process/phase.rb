@@ -16,4 +16,8 @@ class Legislation::Process::Phase
   def open?
     started? && Date.current <= @end_date
   end
+
+  def closed?
+    started? && Date.current > @end_date
+  end
 end

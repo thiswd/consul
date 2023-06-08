@@ -23,6 +23,7 @@ class Legislation::Review::SectionType < ApplicationRecord
   before_create :set_level
 
   delegate :section_types, to: :review
+  delegate :process, to: :review
 
   validates :title, presence: true
 
