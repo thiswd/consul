@@ -3,6 +3,8 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
   load_and_authorize_resource :review, class: "Legislation::Review"
 
   before_action :load_process, only: [:show, :edit]
+  before_action :load_section_types, only: :show
+  before_action :load_sections, only: :show
 
   def index
     @reviews = @process.reviews
@@ -47,5 +49,13 @@ class Admin::Legislation::ReviewsController < Admin::Legislation::BaseController
 
     def load_process
       @process ||= @review.process
+    end
+
+    def load_section_types
+      @section_types ||= @review.section_types
+    end
+
+    def load_sections
+      @sections ||= @review.root_sections
     end
 end
