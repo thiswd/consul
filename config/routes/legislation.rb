@@ -8,7 +8,7 @@ namespace :legislation do
       get :proposals
       get :milestones
       get :summary
-      get :reviews
+      get :review
     end
 
     resources :questions, only: [:show] do
