@@ -1,0 +1,30 @@
+<tr id="<%= dom_id(section) %>">
+  <td><strong><%= section_type_label(indexes) %></strong></td>
+  <td>
+    <%= link_to section.title, edit_admin_legislation_review_section_path(section.review, section) %>
+  </td>
+  <td>
+    <ul>
+      <% section.evaluations.order(:id).each do |evaluation| %>
+        <li><%= "#{evaluation.title} (#{evaluation.section_votes_count})" %></li>
+      <% end %>
+    </ul>
+  </td>
+  <td class="text-center">
+    <%= section.section_votes_count if section.evaluations.any? %>
+  </td>
+  <td class="text-center">
+    <%#= section.comments_count if section.evaluations.any? %>
+  </td>
+</tr>
+
+<% if section.children.any? %>
+  <% counter_level += 1 %>
+  <% section.ordered_children.each.with_index(1) do |child, index| %>
+    <%= render 'section_result_row',
+      section: child,
+      indexes: section_indexes(indexes, index, counter_level),
+      counter_level: counter_level
+    %>
+  <% end %>
+<% end %>
