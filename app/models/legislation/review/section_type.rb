@@ -1,18 +1,18 @@
 class Legislation::Review::SectionType < ApplicationRecord
   belongs_to :review,
     class_name: "Legislation::Review",
-    foreign_key: "legislation_review_id",
+    foreign_key: :legislation_review_id,
     inverse_of: :section_types
 
   has_many :sections,
     class_name: "Legislation::Review::Section",
-    foreign_key: "review_section_section_type_id",
+    foreign_key: :review_section_section_type_id,
     inverse_of: :section_type,
     dependent: :destroy
 
   has_many :poll_options,
     class_name: "Legislation::Review::PollOption",
-    foreign_key: "review_section_type_id",
+    foreign_key: :review_section_type_id,
     inverse_of: :section_type,
     dependent: :destroy
 

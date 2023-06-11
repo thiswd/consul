@@ -3,7 +3,7 @@ class Legislation::Review < ApplicationRecord
   include ActsAsParanoidAliases
 
   belongs_to :process,
-    foreign_key: "legislation_process_id",
+    foreign_key: :legislation_process_id,
     inverse_of: :reviews
 
   belongs_to :author, -> { with_hidden },
@@ -11,13 +11,13 @@ class Legislation::Review < ApplicationRecord
     inverse_of: :legislation_reviews
 
   has_many :section_types,
-    foreign_key: "legislation_review_id",
+    foreign_key: :legislation_review_id,
     class_name: "Legislation::Review::SectionType",
     inverse_of: :review,
     dependent: :destroy
 
   has_many :sections,
-    foreign_key: "legislation_review_id",
+    foreign_key: :legislation_review_id,
     class_name: "Legislation::Review::Section",
     inverse_of: :review,
     dependent: :destroy

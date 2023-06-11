@@ -3,7 +3,7 @@ class Legislation::Review::Section < ApplicationRecord
 
   belongs_to :review,
     class_name: "Legislation::Review",
-    foreign_key: "legislation_review_id",
+    foreign_key: :legislation_review_id,
     inverse_of: :sections
 
   belongs_to :section_type,
@@ -13,7 +13,7 @@ class Legislation::Review::Section < ApplicationRecord
 
   has_many :evaluations,
     class_name: "Legislation::Review::Evaluation",
-    foreign_key: "review_section_id",
+    foreign_key: :review_section_id,
     inverse_of: :section,
     dependent: :destroy
 
