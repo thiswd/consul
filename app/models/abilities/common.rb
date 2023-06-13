@@ -115,6 +115,7 @@ module Abilities
         can :destroy, Poll::Answer do |answer|
           answer.author == user && answer.question.answerable_by?(user)
         end
+        can [:create, :update], Legislation::Review::SectionVote
       end
 
       can [:create, :show], ProposalNotification, proposal: { author_id: user.id }
