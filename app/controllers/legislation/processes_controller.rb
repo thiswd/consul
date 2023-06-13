@@ -26,6 +26,8 @@ class Legislation::ProcessesController < Legislation::BaseController
       redirect_to debate_legislation_process_path(@process)
     elsif @process.proposals_phase.enabled?
       redirect_to proposals_legislation_process_path(@process)
+    elsif @process.review_phase.enabled?
+      redirect_to reviews_legislation_process_path(@process)
     else
       redirect_to allegations_legislation_process_path(@process)
     end
@@ -125,6 +127,29 @@ class Legislation::ProcessesController < Legislation::BaseController
 
     if @process.proposals_phase.started? || current_user&.administrator?
       render :proposals
+    else
+      render :phase_not_open
+    end
+  end
+
+  def review
+    set_process
+    @phase = :review_phase
+
+    if @process.review_phase.started?
+      @reviews = @process.reviews
+      @review = @reviews.first
+      @sections = @review.root_sections
+
+      respond_to do |format|
+        format.html do
+          if @sections.any?
+            render :review
+          else
+            render :phase_empty
+          end
+        end
+      end
     else
       render :phase_not_open
     end
