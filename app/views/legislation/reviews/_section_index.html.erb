@@ -1,0 +1,24 @@
+<li>
+  <div class="section-index-title" id="<%= dom_id(section) %>_index">
+    <%= link_to(
+      "#{section_type_label(indexes)} #{section.title}",
+      anchor: dom_id(section)
+    ) %>
+    <% if user_section_vote(section) %>
+      <span class='icon-check-circle purple-font tiny'></span>
+    <% end %>
+  </div>
+
+  <% if section.children.any? %>
+    <ul>
+      <% counter_level += 1 %>
+      <% section.ordered_children.each.with_index(1) do |child, index| %>
+        <%= render '/legislation/reviews/section_index',
+          section: child,
+          indexes: section_indexes(indexes, index, counter_level),
+          counter_level: counter_level
+        %>
+      <% end %>
+    </ul>
+  <% end %>
+</li>
