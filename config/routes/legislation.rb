@@ -36,6 +36,10 @@ namespace :legislation do
         post :new_comment
       end
     end
+
+    resources :reviews do
+      resources :section_votes, only: [:create, :update], controller: "reviews/section_votes"
+    end
   end
 end
 
