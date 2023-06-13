@@ -17,10 +17,20 @@ class Legislation::Review::Section < ApplicationRecord
     inverse_of: :section,
     dependent: :destroy
 
+  has_many :section_votes,
+    class_name: "Legislation::Review::SectionVote",
+    foreign_key: :review_section_id,
+    inverse_of: :section,
+    dependent: :destroy
+
   before_save :copy_evaluations, if: :evaluable
 
   def ordered_children
     children.order(:id)
+  end
+
+  def section_vote_for_user(user)
+    section_votes.find_by(user_id: user.id)
   end
 
   private

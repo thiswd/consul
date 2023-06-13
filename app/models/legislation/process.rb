@@ -46,6 +46,9 @@ class Legislation::Process < ApplicationRecord
     foreign_key: "legislation_process_id",
     inverse_of:  :process,
     dependent:   :destroy
+  has_many :sections,
+    class_name: "Legislation::Review::Section",
+    through: :reviews
 
   validates_translation :title, presence: true
   validates :start_date, presence: true
@@ -148,6 +151,10 @@ class Legislation::Process < ApplicationRecord
 
   def self.search(terms)
     pg_search(terms)
+  end
+
+  def reviews_votes_count
+    sections.sum(&:section_votes_count)
   end
 
   private

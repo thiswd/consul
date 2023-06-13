@@ -25,4 +25,8 @@ class Legislation::Review < ApplicationRecord
   def root_sections
     sections.roots.order(:id)
   end
+
+  def sections_votes_count
+    sections.sum(&:section_votes_count)
+  end
 end

@@ -19,6 +19,40 @@ module LegislationReviewsHelper
     end
   end
 
+  def user_section_vote(section)
+    return unless current_user
+
+    section.section_vote_for_user(current_user)
+  end
+
+  def find_or_build_section_vote(section)
+    user_section_vote(section) || Legislation::Review::SectionVote.new
+  end
+
+  def hide_box
+    if ["create", "update"].include?(params[:action])
+      ""
+    else
+      "hide-fields"
+    end
+  end
+
+  def section_vote_url(section_vote)
+    if section_vote.new_record?
+      legislation_process_review_section_votes_path(@process, @review)
+    else
+      legislation_process_review_section_vote_path(@process, @review, section_vote)
+    end
+  end
+
+  def section_vote_submit(section_vote)
+    section_vote.new_record? ? "new" : "edit"
+  end
+
+  def review_votes_count_title
+    @process.review_phase.closed? ? "finished_contributions" : "contributions"
+  end
+
   private
 
     def destroy_section_message(section)

@@ -1,0 +1,50 @@
+<% section_vote = find_or_build_section_vote(section) %>
+<p class="evaluate-section with-border"
+  data-info-toggle="<%= dom_id(section) %>_evaluation"
+>
+  <% if section_vote.new_record? %>
+    <i class="fas fa-vote-yea"></i><span>
+      <%= t("legislation.sections.index.evaluate") %>
+    </span>
+  <% else %>
+    <span class="icon-check-circle purple-font"
+      title=" ">
+      <%= t("legislation.sections.index.done") %>
+    </span>
+  <% end %>
+</p>
+
+<div id="<%= dom_id(section) %>_evaluation" class="evaluate-options <%= hide_box %>">
+  <%= form_for section_vote,
+    url: section_vote_url( section_vote),
+    html: { class: "controls-stacked" },
+    remote: true do |f|
+  %>
+    <div class="form">
+      <% section.evaluations.order(:id).each do |evaluation| %>
+        <label class="control radio <%= "is-active" if section_vote.review_evaluation_id == evaluation.id %>">
+          <%= f.radio_button(
+            :review_evaluation_id,
+            evaluation.id,
+            label: false,
+            data: { choose_option: "#{dom_id(section)}_options" }
+          ) %>
+          <span class="control-indicator"></span>
+          <%= evaluation.title %>
+        </label>
+      <% end %>
+    </div>
+    <%= f.hidden_field(
+      :review_section_id,
+      value: section.id,
+      id: "section-id-#{section.id}"
+    ) %>
+    <p class="submit-section-vote no-margin-bottom">
+      <%= f.submit(
+        t("legislation.section_votes.form.#{section_vote_submit(section_vote)}"),
+        class: "button #{dom_id(section)}_options"
+      ) %>
+    </p>
+  <% end %>
+  <%= render "/legislation/reviews/participation_not_allowed" %>
+</div>
