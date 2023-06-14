@@ -137,18 +137,12 @@ class Legislation::ProcessesController < Legislation::BaseController
     @phase = :review_phase
 
     if @process.review_phase.started?
-      @reviews = @process.reviews
-      @review = @reviews.first
-      @sections = @review.root_sections
+      first_review = @process.reviews.first
 
-      respond_to do |format|
-        format.html do
-          if @sections.any?
-            render :review
-          else
-            render :phase_empty
-          end
-        end
+      if first_review.present?
+        redirect_to legislation_process_review_path(@process, first_review)
+      else
+        render :phase_empty
       end
     else
       render :phase_not_open

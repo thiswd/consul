@@ -3,7 +3,7 @@ class Legislation::Reviews::SectionVotesController < Legislation::BaseController
 
   load_and_authorize_resource :process, class: "Legislation::Process"
   load_and_authorize_resource :review, class: "Legislation::Review"
-  load_and_authorize_resource :section_vote, class: "Legislation::Review::SectionVote"
+  load_and_authorize_resource class: "Legislation::Review::SectionVote"
 
   respond_to :js
 
@@ -17,7 +17,7 @@ class Legislation::Reviews::SectionVotesController < Legislation::BaseController
 
   def update
     if @process.review_phase.open?
-      @section_vote.update(section_vote_params)
+      @section_vote.update!(section_vote_params)
     end
   end
 

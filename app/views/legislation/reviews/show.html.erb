@@ -4,7 +4,7 @@
 
 <%= render "documents/additional_documents", process: @process, documents: @process.documents %>
 
-<%= render "key_dates", process: @process, phase: :review_phase %>
+<%= render "legislation/processes/key_dates", process: @process, phase: :review_phase %>
 
 <div class="row column">
   <div class="small-12 medium-9 column reviews-header">
@@ -37,7 +37,7 @@
       class="row review medium-collapse"
       data-equalizer data-equalizer-on="medium"
     >
-      <%= render "legislation/processes/review", sections: @sections
+      <%= render "review", sections: @review.sections
       %>
     </div>
   </div>

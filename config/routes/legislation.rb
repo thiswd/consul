@@ -37,7 +37,7 @@ namespace :legislation do
       end
     end
 
-    resources :reviews do
+    resources :reviews, only: [:show] do
       resources :section_votes, only: [:create, :update], controller: "reviews/section_votes"
     end
   end
