@@ -7,6 +7,14 @@ class Legislation::ProcessesController < Legislation::BaseController
   load_and_authorize_resource
 
   before_action :set_random_seed, only: :proposals
+  before_action :set_process, only: [
+    :debate,
+    :draft_publication,
+    :allegations,
+    :result_publication,
+    :proposals,
+    :review
+  ]
 
   def index
     @current_filter ||= "open"
@@ -34,7 +42,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def debate
-    set_process
     @phase = :debate_phase
 
     if @process.debate_phase.started? || current_user&.administrator?
@@ -45,7 +52,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def draft_publication
-    set_process
     @phase = :draft_publication
 
     if @process.draft_publication.started?
@@ -62,7 +68,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def allegations
-    set_process
     @phase = :allegations_phase
 
     if @process.allegations_phase.started?
@@ -79,7 +84,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def result_publication
-    set_process
     @phase = :result_publication
 
     if @process.result_publication.started?
@@ -111,7 +115,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def proposals
-    set_process
     @phase = :proposals_phase
 
     @proposals = ::Legislation::Proposal.where(process: @process).filter_by(params[:advanced_search])
@@ -133,7 +136,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def review
-    set_process
     @phase = :review_phase
 
     if @process.review_phase.started?
