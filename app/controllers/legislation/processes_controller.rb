@@ -7,6 +7,14 @@ class Legislation::ProcessesController < Legislation::BaseController
   load_and_authorize_resource
 
   before_action :set_random_seed, only: :proposals
+  before_action :set_process, only: [
+    :debate,
+    :draft_publication,
+    :allegations,
+    :result_publication,
+    :proposals,
+    :review
+  ]
 
   def index
     @current_filter ||= "open"
@@ -26,13 +34,14 @@ class Legislation::ProcessesController < Legislation::BaseController
       redirect_to debate_legislation_process_path(@process)
     elsif @process.proposals_phase.enabled?
       redirect_to proposals_legislation_process_path(@process)
+    elsif @process.review_phase.enabled?
+      redirect_to reviews_legislation_process_path(@process)
     else
       redirect_to allegations_legislation_process_path(@process)
     end
   end
 
   def debate
-    set_process
     @phase = :debate_phase
 
     if @process.debate_phase.started? || current_user&.administrator?
@@ -43,7 +52,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def draft_publication
-    set_process
     @phase = :draft_publication
 
     if @process.draft_publication.started?
@@ -60,7 +68,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def allegations
-    set_process
     @phase = :allegations_phase
 
     if @process.allegations_phase.started?
@@ -77,7 +84,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def result_publication
-    set_process
     @phase = :result_publication
 
     if @process.result_publication.started?
@@ -109,7 +115,6 @@ class Legislation::ProcessesController < Legislation::BaseController
   end
 
   def proposals
-    set_process
     @phase = :proposals_phase
 
     @proposals = ::Legislation::Proposal.where(process: @process).filter_by(params[:advanced_search])
@@ -125,6 +130,22 @@ class Legislation::ProcessesController < Legislation::BaseController
 
     if @process.proposals_phase.started? || current_user&.administrator?
       render :proposals
+    else
+      render :phase_not_open
+    end
+  end
+
+  def review
+    @phase = :review_phase
+
+    if @process.review_phase.started?
+      first_review = @process.reviews.first
+
+      if first_review.present?
+        redirect_to legislation_process_review_path(@process, first_review)
+      else
+        render :phase_empty
+      end
     else
       render :phase_not_open
     end

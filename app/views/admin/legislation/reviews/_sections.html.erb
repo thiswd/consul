@@ -1,0 +1,22 @@
+<h2 class="inline-block no-margin-bottom">
+  <%= t("admin.legislation.reviews.show.sections.title") %>
+</h2>
+
+<p class="section-form-link">
+  <%= link_to(
+    t(
+      "admin.legislation.reviews.show.sections.new",
+      title: @section_types.first.downcase_title
+    ),
+    new_admin_legislation_review_section_path(@review,
+      legislation_review_section: { review_section_section_type_id: @section_types.first.id }
+    )
+  ) %>
+</p>
+
+<% counter_level = 1 %>
+<% @sections.each.with_index(1) do |section, index| %>
+  <%= render 'section',
+    section: section, indexes: [index], counter_level: counter_level
+  %>
+<% end %>

@@ -1,0 +1,44 @@
+<% provide :title do %><%= @process.title %><% end %>
+
+<%= render "legislation/processes/header", process: @process, header: :full %>
+
+<%= render "documents/additional_documents", process: @process, documents: @process.documents %>
+
+<%= render "legislation/processes/key_dates", process: @process, phase: :review_phase %>
+
+<div class="row column">
+  <div class="small-12 medium-9 column reviews-header">
+    <h3><%= t("legislation.processes.reviews.title") %></h3>
+  </div>
+
+  <div class="small-12 medium-3 column reviews-comments-btn">
+    <%#= link_to comments_legislation_process_reviews_path(
+      @process), class: "button expanded" do %>
+      <strong><%= t("legislation.reviews.index.see_comments") %></strong>
+    <%# end %>
+  </div>
+</div>
+
+<div class="row column">
+  <div>
+    <p class="reviews-votes-count float-right">
+      <i class="fas fa-vote-yea"></i>
+      <span>
+        <%= t(
+          "legislation.reviews.index.#{review_votes_count_title}",
+          count: @process.reviews_votes_count
+        ) %>
+      </span>
+    </p>
+  </div>
+
+  <div class="review-panels small-12 column row">
+    <div
+      class="row review medium-collapse"
+      data-equalizer data-equalizer-on="medium"
+    >
+      <%= render "review", sections: @review.sections
+      %>
+    </div>
+  </div>
+</div>

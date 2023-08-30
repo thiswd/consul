@@ -13,9 +13,12 @@ FactoryBot.define do
     allegations_end_date { Date.current + 3.days }
     proposals_phase_start_date { Date.current }
     proposals_phase_end_date { Date.current + 2.days }
+    review_start_date { Date.current }
+    review_end_date { Date.current + 4.days }
     result_publication_date { Date.current + 5.days }
     debate_phase_enabled { true }
     allegations_phase_enabled { true }
+    review_phase_enabled { true }
     proposals_phase_enabled { true }
     draft_publication_enabled { true }
     result_publication_enabled { true }
@@ -29,6 +32,8 @@ FactoryBot.define do
       draft_publication_date { Date.current - 8.days }
       allegations_start_date { Date.current - 8.days }
       allegations_end_date { Date.current - 4.days }
+      review_start_date { Date.current - 8.days }
+      review_end_date { Date.current - 4.days }
       result_publication_date { Date.current - 2.days }
     end
 
@@ -84,6 +89,8 @@ FactoryBot.define do
       draft_publication_date { nil }
       allegations_start_date { nil }
       allegations_end_date { nil }
+      review_start_date { nil }
+      review_end_date { nil }
       proposals_phase_start_date { nil }
       proposals_phase_end_date { nil }
       result_publication_date { nil }

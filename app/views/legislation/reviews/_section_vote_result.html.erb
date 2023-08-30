@@ -1,0 +1,33 @@
+<% section_vote = find_or_build_section_vote(section) %>
+<p class="contributions-label">
+  <i class="fas fa-vote-yea"></i><span>
+    <%= t("legislation.sections.index.participations") %>
+  </span>
+</p>
+
+<div id="<%= dom_id(section) %>_evaluation" class="evaluate-options evaluate-results">
+  <p class="evaluation-votes">
+    <% section.evaluations.order(:id).each do |evaluation| %>
+      <span class="control <%= "is-active" if section_vote.legislation_evaluation_id == evaluation.id %>">
+        <%= "#{evaluation.title} (#{evaluation.section_votes_count})" %>
+      </span>
+    <% end %>
+  </p>
+  <% comments_count = section.comments_count %>
+  <% if comments_count > 0 %>
+    <p class="section-votes-comments">
+      <%= link_to comments_legislation_process_sections_path(
+        @process, anchor: dom_id(section)
+      ), target: :_blank do %>
+        <span class="icon-comments"></span>
+        <%= t("legislation.sections.index.comments", count: comments_count) %>
+      <% end %>
+    </p>
+  <% else %>
+    <p class="section-votes-comments no-comment">
+      <span class="icon-comments"></span>
+      <%= t("legislation.sections.index.no_comment") %>
+    </p>
+  <% end %>
+  </p>
+</div>

@@ -1,0 +1,34 @@
+<div class="section-text">
+  <div id="<%= dom_id(section) %>" class="section-block">
+    <h4>
+      <%= "#{section_type_label(indexes)} #{section.title}" %>
+    </h4>
+
+    <% if section.description.present? %>
+      <div class="section-description">
+        <%= wysiwyg(section.description) %>
+      </div>
+    <% end %>
+
+    <% if section.evaluable %>
+      <% if @process.review_phase.closed? %>
+        <%= render "/legislation/reviews/section_vote_result", section: section %>
+      <% else %>
+        <div id="<%= dom_id(section) %>_section_vote_form" class="section-vote-form">
+          <%= render "/legislation/reviews/section_vote_form", section: section %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if section.children.any? %>
+    <% counter_level += 1 %>
+    <% section.ordered_children.each.with_index(1) do |child, index| %>
+      <%= render "/legislation/reviews/section",
+        section: child,
+        indexes: section_indexes(indexes, index, counter_level),
+        counter_level: counter_level
+      %>
+    <% end %>
+  <% end %>
+</div>

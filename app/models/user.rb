@@ -54,6 +54,12 @@ class User < ApplicationRecord
     class_name:  "Legislation::Question",
     foreign_key: :author_id,
     inverse_of:  :author
+  has_many :legislation_reviews,
+    class_name:  "Legislation::Review",
+    inverse_of:  :author
+  has_many :legislation_review_section_votes,
+    class_name: "Legislation::Review::SectionVote",
+    inverse_of: :author
   has_many :polls, foreign_key: :author_id, inverse_of: :author
   has_many :poll_answers,
     class_name:  "Poll::Answer",

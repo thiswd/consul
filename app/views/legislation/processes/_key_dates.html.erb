@@ -42,6 +42,15 @@
           </li>
         <% end %>
 
+        <% if process.review_phase.enabled? %>
+          <li <%= "class=is-active" if phase.to_sym == :review_phase %>>
+            <%= link_to review_legislation_process_path(process) do %>
+              <h4><%= t("legislation.processes.shared.review_dates") %></h4>
+              <span><%= format_date(process.review_start_date) %> - <%= format_date(process.review_end_date) %></span>
+            <% end %>
+          </li>
+        <% end %>
+
         <% if process.milestones.any? || process.progress_bars.any? %>
           <li class="milestones <%= "is-active" if phase == :milestones %>">
             <%= link_to milestones_legislation_process_path(process) do %>

@@ -26,6 +26,13 @@ RSpec.describe Legislation::Process::Phase, type: :model do
       process.update!(allegations_phase_enabled: false)
       expect(process.allegations_phase.enabled?).to be false
     end
+
+    it "checks review phase" do
+      expect(process.review_phase.enabled?).to be true
+
+      process.update!(review_phase_enabled: false)
+      expect(process.review_phase.enabled?).to be false
+    end
   end
 
   describe "#started?" do
@@ -94,6 +101,28 @@ RSpec.describe Legislation::Process::Phase, type: :model do
                       allegations_end_date: Date.current - 1.day)
       expect(process.allegations_phase.started?).to be true
     end
+
+    it "checks review phase" do
+      # future
+      process.update!(review_start_date: Date.current + 2.days,
+                      review_end_date: Date.current + 3.days)
+      expect(process.review_phase.started?).to be false
+
+      # started
+      process.update!(review_start_date: Date.current - 2.days,
+                      review_end_date: Date.current + 1.day)
+      expect(process.review_phase.started?).to be true
+
+      # starts today
+      process.update!(review_start_date: Date.current,
+                      review_end_date: Date.current + 1.day)
+      expect(process.review_phase.started?).to be true
+
+      # past
+      process.update!(review_start_date: Date.current - 2.days,
+                      review_end_date: Date.current - 1.day)
+      expect(process.review_phase.started?).to be true
+    end
   end
 
   describe "#open?" do
@@ -161,6 +190,28 @@ RSpec.describe Legislation::Process::Phase, type: :model do
       process.update!(allegations_start_date: Date.current - 2.days,
                       allegations_end_date: Date.current - 1.day)
       expect(process.allegations_phase.open?).to be false
+    end
+
+    it "checks review phase" do
+      # future
+      process.update!(review_start_date: Date.current + 2.days,
+                      review_end_date: Date.current + 3.days)
+      expect(process.review_phase.open?).to be false
+
+      # started
+      process.update!(review_start_date: Date.current - 2.days,
+                      review_end_date: Date.current + 1.day)
+      expect(process.review_phase.open?).to be true
+
+      # starts today
+      process.update!(review_start_date: Date.current,
+                      review_end_date: Date.current + 1.day)
+      expect(process.review_phase.open?).to be true
+
+      # past
+      process.update!(review_start_date: Date.current - 2.days,
+                      review_end_date: Date.current - 1.day)
+      expect(process.review_phase.open?).to be false
     end
   end
 end

@@ -1,0 +1,11 @@
+<div>
+  <%= render "header" %>
+
+  <h2 class="inline-block">
+    <%= t(
+      "admin.legislation.reviews.sections.edit.title", title: @section_type.title.downcase
+    ) %>
+  </h2>
+
+  <%= render "form", url: admin_legislation_review_section_path(@review, @section) %>
+</div>

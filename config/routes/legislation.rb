@@ -8,6 +8,7 @@ namespace :legislation do
       get :proposals
       get :milestones
       get :summary
+      get :review
     end
 
     resources :questions, only: [:show] do
@@ -34,6 +35,10 @@ namespace :legislation do
         get :comments
         post :new_comment
       end
+    end
+
+    resources :reviews, only: [:show] do
+      resources :section_votes, only: [:create, :update], controller: "reviews/section_votes"
     end
   end
 end
